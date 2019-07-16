@@ -13,7 +13,6 @@ const name = process.argv[2]
 const sw = hyperswarm()
 
 sw.on('connection', function (connection) {
-  console.log('connection')
   pump(connection, net.connect(22, 'localhost'), connection)
 })
 
