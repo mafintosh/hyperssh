@@ -24,6 +24,9 @@ Does the ssh auth under the hood so the name does
 not need to be secure, just uncommon enough so that you
 don't hit someone elses server
 
+In addition this does UDP hole punching through hyperswarm so it's great
+for making your office server available over ssh
+
 ## License
 
 MIT
