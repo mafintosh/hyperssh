@@ -25,7 +25,7 @@ sw.on('connection', function (connection) {
   pump(connection, net.connect(22, 'localhost'), connection)
 })
 
-sw.join(hash(name), {
+sw.join(hash(fingerprint), {
   announce: true,
   lookup: false
 })
