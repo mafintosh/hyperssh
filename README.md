@@ -9,23 +9,26 @@ npm install -g hyperssh
 On a server or some laptop with ssh-server running run
 
 ```sh
-hyperssh-server some-name-here-you-can-remember
+hyperssh-server
 ```
 
-Then on another client to ssh to that server do
+This will print out the ssh fingerprint and start announcing the server
+on the Hyperswarm network under this fingerprint.
+
+To connect to the server on another computer simply pass in the fingerprint
+and the user you want to connect as to hyperssh
 
 ```sh
-hyperssh user@some-name-here-you-can-remember
+hyperssh ssh-ed25519 AAAA.... maf
 ```
 
 That's it! No more remembering hostnames :D
 
-Does the ssh auth under the hood so the name does
-not need to be secure, just uncommon enough so that you
-don't hit someone elses server
+In addition this forwards the ssh fingerprint to the client so your connection cannot be
+man-in-the-middle'd.
 
-In addition this does UDP hole punching through hyperswarm so it's great
-for making your office server available over ssh
+Does UDP hole punching through hyperswarm so it's great for making your office server available over ssh
+even if that server is behind a firewall
 
 ## License
 

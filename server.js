@@ -20,7 +20,7 @@ try {
 
 const usr = process.argv[2] || os.userInfo().username
 
-console.log('Run hyperssh ' + fingerprint + ' ' + usr)
+console.log('To connect to this ssh server, on another computer run:\nhyperssh ' + fingerprint + ' ' + usr)
 
 const sw = hyperswarm()
 

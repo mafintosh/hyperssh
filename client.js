@@ -9,7 +9,7 @@ const path = require('path')
 const fs = require('fs')
 
 if (!process.argv[3]) {
-  console.error('Usage: hyperssh [type] [fingerprint] [user?]')
+  console.error('Usage: hyperssh [type] [fingerprint] [user?] [ssh-options...]')
   process.exit(1)
 }
 
