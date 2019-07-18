@@ -11,10 +11,9 @@ let fingerprint
 try {
   fingerprint = execSync('ssh-keyscan localhost', { stdio: ['ignore', null, 'ignore'] }).toString().split('\n')
     .map(l => l.trim())
-    .filter(l => l[0] !== '#')
-    [0].split(' ').slice(1).join(' ')
+    .filter(l => l[0] !== '#')[0].split(' ').slice(1).join(' ')
 } catch (err) {
-  console.log('Run me on machine with ssh server installed (' + err.message +')')
+  console.log('Run me on machine with ssh server installed (' + err.message + ')')
   process.exit(2)
 }
 

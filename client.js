@@ -32,7 +32,7 @@ sw.once('connection', function (connection) {
   proxy.listen(0, function () {
     const { port } = proxy.address()
     fs.writeFileSync(tmp, `[localhost]:${port} ${type} ${fingerprint}`)
-    spawn('ssh', [ '-o', 'UserKnownHostsFile=' + tmp, '-p', port, usr + '@localhost' ].concat(argv), {
+    spawn('ssh', ['-o', 'UserKnownHostsFile=' + tmp, '-p', port, usr + '@localhost'].concat(argv), {
       stdio: 'inherit'
     }).once('exit', function (code) {
       process.exit(code)
