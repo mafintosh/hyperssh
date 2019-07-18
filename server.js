@@ -1,15 +1,24 @@
 #!/usr/bin/env node
 
 const hyperswarm = require('hyperswarm')
+const { execSync } = require('child_process')
 const net = require('net')
 const pump = require('pump')
 
-if (!process.argv[2]) {
-  console.error('Usage: hyperssh-server name')
-  process.exit(1)
+let fingerprint
+
+try {
+  fingerprint = execSync('ssh-keyscan localhost').toString().split('\n')
+    .map(l => l.trim())
+    .filter(l => l[0] !== '#')
+    [0].split(' ').slice(1).join(' ')
+} catch (err) {
+  console.log('Run me on machine with ssh server installed (' + err.message +')')
+  process.exit(2)
 }
 
-const name = process.argv[2]
+console.log('Run hyperssh ' + fingerprint)
+
 const sw = hyperswarm()
 
 sw.on('connection', function (connection) {
