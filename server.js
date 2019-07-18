@@ -4,6 +4,7 @@ const hyperswarm = require('hyperswarm')
 const { execSync } = require('child_process')
 const net = require('net')
 const pump = require('pump')
+const os = require('os')
 
 let fingerprint
 
@@ -17,7 +18,9 @@ try {
   process.exit(2)
 }
 
-console.log('Run hyperssh ' + fingerprint)
+const usr = process.argv[2] || os.userInfo().username
+
+console.log('Run hyperssh ' + fingerprint + ' ' + usr)
 
 const sw = hyperswarm()
 
