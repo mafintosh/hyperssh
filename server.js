@@ -9,7 +9,7 @@ const os = require('os')
 let fingerprint
 
 try {
-  fingerprint = execSync('ssh-keyscan localhost', { stdio: ['ignore', null, 'ignore'] }).toString().split('\n')
+  fingerprint = execSync('ssh-keyscan -t "rsa" localhost', { stdio: ['ignore', null, 'ignore'] }).toString().split('\n')
     .map(l => l.trim())
     .filter(l => l[0] !== '#')[0].split(' ').slice(1).join(' ')
 } catch (err) {
