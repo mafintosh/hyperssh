@@ -7,9 +7,20 @@ const pump = require('pump')
 const os = require('os')
 
 let fingerprint
+const keyTypes = ['dsa', 'ecdsa', 'ed25519', 'rsa']
+let optStr = ''
+if (process.argv.length > 3) {
+  const key = process.argv[3]
+  if (keyTypes.includes(key)) {
+    optStr = '-t ' + key + ' '
+  } else {
+    console.log('Usage hyperssh-server [user?] [dsa|ecdsa|ed25519|rsa?]')
+    process.exit(2)
+  }
+}
 
 try {
-  fingerprint = execSync('ssh-keyscan localhost', { stdio: ['ignore', null, 'ignore'] }).toString().split('\n')
+  fingerprint = execSync('ssh-keyscan ' + optStr + 'localhost', { stdio: ['ignore', null, 'ignore'] }).toString().split('\n')
     .map(l => l.trim())
     .filter(l => l[0] !== '#')[0].split(' ').slice(1).join(' ')
 } catch (err) {

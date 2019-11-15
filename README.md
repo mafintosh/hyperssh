@@ -29,6 +29,17 @@ man-in-the-middle'd.
 
 Does UDP hole punching through hyperswarm so it's great for making your office server available over ssh
 even if that server is behind a firewall
+## Options
+
+```sh
+hyperssh-server [user?] [type?]
+```
+
+Run the server to login as the given user and use the given fingerprint type. By default chooses a random key from the available keys on your system. Passing the fingerprint type option allows for consistent results across restarts of the server.
+
+```sh
+hyperssh [type] [signature] [user?] [ssh-options...]
+```
 
 ## License
 
