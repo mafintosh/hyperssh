@@ -13,7 +13,7 @@ if (!process.argv[2]) {
 
 const key = process.argv[2]
 const usr = process.argv[3] || os.userInfo().username
-const argv = process.argv.slice(3)
+const argv = process.argv.slice(4)
 
 console.log('key:', key, 'usr:', usr, 'argv:', argv)
 
