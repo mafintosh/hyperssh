@@ -1,45 +1,33 @@
 #!/usr/bin/env node
 
-const hyperswarm = require('hyperswarm')
-const { execSync } = require('child_process')
+const { Client: KatClient, keyPair: katKeyPair } = require('@hyperswarm/kat')
 const net = require('net')
 const pump = require('pump')
-const os = require('os')
+const sodium = require('sodium-universal')
 
-let fingerprint
+const seed = process.argv[2] ? Buffer.from(process.argv[2], 'hex') : randomBytes(32)
+const kp = katKeyPair(seed)
 
-try {
-  fingerprint = execSync('ssh-keyscan localhost', { stdio: ['ignore', null, 'ignore'] }).toString().split('\n')
-    .map(l => l.trim())
-    .filter(l => l[0] !== '#')[0].split(' ').slice(1).join(' ')
-} catch (err) {
-  console.log('Run me on machine with ssh server installed (' + err.message + ')')
-  process.exit(2)
-}
 
-const usr = process.argv[2] || os.userInfo().username
-
-console.log('To connect to this ssh server, on another computer run:\nhyperssh ' + fingerprint + ' ' + usr)
-
-const sw = hyperswarm()
-
-sw.on('connection', function (connection) {
+const kat = new KatClient([
+  '22acc4e5b1b63d0b18bcdd7e059acf4c66f6b829b7526dd9768ae38d5d936437@bootstrap1.hyperdht.org:23232',
+  'dfbe7c199469d3d02fe152a07a8cb3a88bc7f62427cd2975c985015ff25e172f@bootstrap2.hyperdht.org:23232'
+])
+kat.on('connection', function (connection) {
+  console.log('got a connection!', connection._utp.remoteAddress)
   pump(connection, net.connect(22, 'localhost'), connection)
 })
-
-sw.join(hash(fingerprint), {
-  announce: true,
-  lookup: false
+kat.join(kp).then(() => {
+  console.log('To connect to this ssh server, on another computer run:\nkatssh ' + kp.publicKey.toString('hex'))
+  console.log('Using seed: ' + seed.toString('hex'))
 })
 
 process.once('SIGINT', function () {
-  sw.once('close', function () {
-    process.exit()
-  })
-  sw.destroy()
-  setTimeout(() => process.exit(), 2000)
+  kat.destroy()
 })
 
-function hash (name) {
-  return require('crypto').createHash('sha256').update(name).digest()
+function randomBytes (n) {
+  const b = Buffer.alloc(n)
+  sodium.randombytes_buf(b)
+  return b
 }
