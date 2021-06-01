@@ -1,16 +1,16 @@
 {
-  "name": "katssh",
+  "name": "hyperssh",
   "version": "0.0.0",
-  "description": "Run SSH over KAT!",
+  "description": "Run SSH over Hyperswarm Beta!",
   "main": "index.js",
   "dependencies": {
-    "@hyperswarm/kat": "0.0.7",
+    "@hyperswarm/dht": "hyperswarm/dht#v5",
     "pump": "^3.0.0"
   },
   "devDependencies": {},
   "bin": {
-    "katssh-server": "./server.js",
-    "katssh": "./client.js"
+    "hyperssh-server": "./server.js",
+    "hyperssh": "./client.js"
   },
   "repository": {
     "type": "git",
