@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const HyperDHT = require('@hyperswarm/dht')
 const net = require('net')
 const pump = require('pump')
@@ -15,7 +14,7 @@ const server = dht.createServer(connection => {
   pump(connection, net.connect(22, 'localhost'), connection)
 })
 server.listen(keyPair).then(() => {
-  console.log('To connect to this ssh server, on another computer run:\nkatssh ' + keyPair.publicKey.toString('hex'))
+  console.log('To connect to this ssh server, on another computer run:\hyperssh ' + keyPair.publicKey.toString('hex'))
   console.log('Using seed: ' + seed.toString('hex'))
 })
 

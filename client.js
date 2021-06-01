@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const { spawn } = require('child_process')
 const HyperDHT = require('@hyperswarm/dht')
 const net = require('net')
