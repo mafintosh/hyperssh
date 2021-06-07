@@ -11,8 +11,8 @@ if (!process.argv[2]) {
 }
 
 const key = process.argv[2]
-const usr = process.argv[3] || os.userInfo().username
-const argv = process.argv.slice(4)
+const username = process.argv[3] || os.userInfo().username
+const sshCommand = process.argv.slice(4)
 
 const dht = new HyperDHT()
 const keyPair = HyperDHT.keyPair() // Can be an ephemeral keypair for now.
@@ -25,7 +25,7 @@ stream.on('open', () => {
   console.log('got a connection!')
   proxy.listen(0, function () {
     const { port } = proxy.address()
-    spawn('ssh', ['-o', 'StrictHostKeyChecking=no', '-p', port, usr + '@localhost'].concat(argv), {
+    spawn('ssh', sshArgs(username, port), {
       stdio: 'inherit'
     }).once('exit', function (code) {
       process.exit(code)
@@ -36,3 +36,12 @@ stream.on('open', () => {
 process.once('SIGINT', function () {
   dht.destroy()
 })
+
+function sshArgs (username, port) {
+  return [
+    '-o', 'StrictHostKeyChecking=no',
+    '-o', 'UserKnownHostsFile=/dev/null',
+    '-p', port,
+    username + '@localhost'
+  ].concat(sshCommand)
+}
