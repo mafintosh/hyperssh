@@ -25,7 +25,7 @@ hyperssh ab01f... maf
 
 That's it! No more remembering hostnames :D
 
-Hyperswarm will do UDP hole punching under the hood, so even if your server is located on a home network it should be accessible.
+Hyperswarm will do UDP holepunching under the hood, so even if your server is located on a home network it should be accessible.
 
 ## License
 
