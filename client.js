@@ -1,38 +1,30 @@
 #!/usr/bin/env node
-
 const { spawn } = require('child_process')
-const hyperswarm = require('hyperswarm')
+const HyperDHT = require('@hyperswarm/dht')
 const net = require('net')
 const pump = require('pump')
 const os = require('os')
-const path = require('path')
-const fs = require('fs')
 
-if (!process.argv[3]) {
-  console.error('Usage: hyperssh [type] [fingerprint] [user?] [ssh-options...]')
+if (!process.argv[2]) {
+  console.error('Usage: hyperssh [key] [user?] [ssh-options...]')
   process.exit(1)
 }
 
-const usr = process.argv[4] || os.userInfo().username
-const type = process.argv[2]
-const fingerprint = process.argv[3]
-const sw = hyperswarm()
+const key = process.argv[2]
+const username = process.argv[3] || os.userInfo().username
+const sshCommand = process.argv.slice(4)
 
-const name = type + ' ' + fingerprint
-const argv = process.argv.slice(5)
-const tmp = path.join(os.tmpdir(), hash(name).toString('hex') + '.known-hosts')
+const dht = new HyperDHT()
+const keyPair = HyperDHT.keyPair() // Can be an ephemeral keypair for now.
 
-sw.once('connection', function (connection) {
-  sw.leave(hash(name))
-
-  const proxy = net.createServer(function (socket) {
-    pump(socket, connection, socket)
-  })
-
+const stream = dht.connect(Buffer.from(key, 'hex'), keyPair)
+const proxy = net.createServer(function (socket) {
+  pump(socket, stream, socket)
+})
+stream.on('open', () => {
   proxy.listen(0, function () {
     const { port } = proxy.address()
-    fs.writeFileSync(tmp, `[localhost]:${port} ${type} ${fingerprint}`)
-    spawn('ssh', ['-o', 'UserKnownHostsFile=' + tmp, '-p', port, usr + '@localhost'].concat(argv), {
+    spawn('ssh', sshArgs(username, port), {
       stdio: 'inherit'
     }).once('exit', function (code) {
       process.exit(code)
@@ -40,19 +32,15 @@ sw.once('connection', function (connection) {
   })
 })
 
-sw.join(hash(name), {
-  announce: false,
-  lookup: true
-})
-
 process.once('SIGINT', function () {
-  sw.once('close', function () {
-    process.exit()
-  })
-  sw.destroy()
-  setTimeout(() => process.exit(), 2000)
+  dht.destroy()
 })
 
-function hash (name) {
-  return require('crypto').createHash('sha256').update(name).digest()
+function sshArgs (username, port) {
+  return [
+    '-o', 'StrictHostKeyChecking=no',
+    '-o', 'UserKnownHostsFile=/dev/null',
+    '-p', port,
+    username + '@localhost'
+  ].concat(sshCommand)
 }

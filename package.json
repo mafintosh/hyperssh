@@ -1,10 +1,10 @@
 {
   "name": "hyperssh",
   "version": "2.0.0",
-  "description": "Run SSH over hyperswarm!",
+  "description": "Run SSH over Hyperswarm Beta!",
   "main": "index.js",
   "dependencies": {
-    "hyperswarm": "^2.0.4",
+    "@hyperswarm/dht": "next",
     "pump": "^3.0.0"
   },
   "devDependencies": {},
