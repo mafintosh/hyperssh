@@ -27,6 +27,25 @@ That's it! No more remembering hostnames :D
 
 Hyperswarm will do UDP holepunching under the hood, so even if your server is located on a home network it should be accessible.
 
+### Windows RDP
+
+You can also use hyperssh with Windows RDP to remotely log in to your windows machines over Hyperswarm.
+
+On the machine you want to log in to (make sure you have RDP enabled)
+
+```sh
+hyperssh-server --rdp
+```
+
+Then on another computer somewhere on the internet do
+
+```sh
+hyperssh --rdp ab0f...
+```
+
+And open your favorite RDP client, configure it to connect to localhost over port 3389 (default),
+with the Windows username etc.
+
 ## License
 
 MIT
