@@ -3,18 +3,28 @@ const HyperDHT = require('@hyperswarm/dht')
 const net = require('net')
 const pump = require('pump')
 const sodium = require('sodium-universal')
+const os = require('os')
+const minimist = require('minimist')
 
-const seed = process.argv[2] ? Buffer.from(process.argv[2], 'hex') : randomBytes(32)
+const argv = minimist(process.argv)
+const seed = argv._[2] ? Buffer.from(argv._[2], 'hex') : randomBytes(32)
+const rdp = argv.rdp
+const { username } = os.userInfo()
 
 const dht = new HyperDHT()
 const keyPair = HyperDHT.keyPair(seed)
 
 const server = dht.createServer(connection => {
-  pump(connection, net.connect(22, 'localhost'), connection)
+  pump(connection, net.connect(rdp ? 3389 : 22, 'localhost'), connection)
 })
+
+console.log('Using this seed to generate the key-pair:\n' + seed.toString('hex') + '\n')
 server.listen(keyPair).then(() => {
-  console.log('To connect to this ssh server, on another computer run:\hyperssh ' + keyPair.publicKey.toString('hex'))
-  console.log('Using seed: ' + seed.toString('hex'))
+  if (rdp) {
+    console.log('To connect over RDP to this machine, on another computer run:\nhyperssh --rdp ' + keyPair.publicKey.toString('hex'))
+  } else {
+    console.log('To connect to this ssh server, on another computer run:\nhyperssh ' + keyPair.publicKey.toString('hex') + ' ' + username)
+  }
 })
 
 process.once('SIGINT', function () {

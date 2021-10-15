@@ -6,22 +6,33 @@ const pump = require('pump')
 const os = require('os')
 
 if (!process.argv[2]) {
-  console.error('Usage: hyperssh [key] [user?] [ssh-options...]')
+  console.error('Usage: hyperssh [--rdp?] [key] [user?] [ssh-options...]')
   process.exit(1)
 }
 
-const key = process.argv[2]
-const username = process.argv[3] || os.userInfo().username
-const sshCommand = process.argv.slice(4)
+const rdp = process.argv[2] === '--rdp'
+const offset = rdp ? 3 : 2
+const key = process.argv[offset]
+const username = process.argv[offset + 1] || os.userInfo().username
+const sshCommand = process.argv.slice(offset + 2)
+
+if (!key || !/^[a-fA-F0-9]{64}$/.test(key)) {
+  console.error('Usage: hyperssh [--rdp?] [key] [user?] [ssh-options...]')
+  process.exit(1)
+}
 
 const dht = new HyperDHT()
-const keyPair = HyperDHT.keyPair() // Can be an ephemeral keypair for now.
 
-const stream = dht.connect(Buffer.from(key, 'hex'), keyPair)
 const proxy = net.createServer(function (socket) {
+  const stream = dht.connect(Buffer.from(key, 'hex'))
   pump(socket, stream, socket)
 })
-stream.on('open', () => {
+
+if (rdp) {
+  proxy.listen(3389, function () {
+    console.log('Client listening on port 3389 (default RDP port)\nOpen your RDP client and connect to localhost')
+  })
+} else {
   proxy.listen(0, function () {
     const { port } = proxy.address()
     spawn('ssh', sshArgs(username, port), {
@@ -30,10 +41,12 @@ stream.on('open', () => {
       process.exit(code)
     })
   })
-})
+}
 
 process.once('SIGINT', function () {
-  dht.destroy()
+  dht.destroy().then(function () {
+    process.exit()
+  })
 })
 
 function sshArgs (username, port) {

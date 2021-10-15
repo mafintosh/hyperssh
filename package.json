@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@hyperswarm/dht": "next",
+    "minimist": "^1.2.5",
     "pump": "^3.0.0"
   },
   "devDependencies": {},
