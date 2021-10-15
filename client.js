@@ -22,7 +22,6 @@ const proxy = net.createServer(function (socket) {
   pump(socket, stream, socket)
 })
 stream.on('open', () => {
-  console.log('got a connection!')
   proxy.listen(0, function () {
     const { port } = proxy.address()
     spawn('ssh', sshArgs(username, port), {

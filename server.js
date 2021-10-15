@@ -10,7 +10,6 @@ const dht = new HyperDHT()
 const keyPair = HyperDHT.keyPair(seed)
 
 const server = dht.createServer(connection => {
-  console.log('got a connection!', connection._utp.remoteAddress)
   pump(connection, net.connect(22, 'localhost'), connection)
 })
 server.listen(keyPair).then(() => {
