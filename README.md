@@ -1,10 +1,13 @@
 # hyperssh
 
-Run SSH over [hyperswarm](https://github.com/hyperswarm/hyperswarm)!
+Run SSH over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
 
+### Installation
 ```
 npm install -g hyperssh
 ```
+
+### Usage
 
 On a server or some laptop with ssh-server running run
 
@@ -12,23 +15,17 @@ On a server or some laptop with ssh-server running run
 hyperssh-server
 ```
 
-This will print out the ssh fingerprint and start announcing the server
-on the Hyperswarm network under this fingerprint.
+This will start announcing the server on the DHT, and will print out the Noise public key of the server.
 
-To connect to the server on another computer simply pass in the fingerprint
-and the user you want to connect as to hyperssh
+To connect to the server on another computer simply pass the Noise public key to the `hyperssh` command, along with an optional username:
 
 ```sh
-hyperssh ssh-ed25519 AAAA.... maf
+hyperssh ab01f... maf
 ```
 
 That's it! No more remembering hostnames :D
 
-In addition this forwards the ssh fingerprint to the client so your connection cannot be
-man-in-the-middle'd.
-
-Does UDP hole punching through hyperswarm so it's great for making your office server available over ssh
-even if that server is behind a firewall
+Hyperswarm will do UDP hole punching under the hood, so even if your server is located on a home network it should be accessible.
 
 ## License
 
