@@ -6,7 +6,7 @@ const sodium = require('sodium-universal')
 const os = require('os')
 const minimist = require('minimist')
 
-const argv = minimist(process.argv)
+const argv = minimist(process.argv, { boolean: ['rdp'] })
 const seed = argv._[2] ? Buffer.from(argv._[2], 'hex') : randomBytes(32)
 const rdp = argv.rdp
 const { username } = os.userInfo()
