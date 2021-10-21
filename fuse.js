@@ -31,7 +31,7 @@ const proxy = net.createServer(function (socket) {
 
 proxy.listen(0, function () {
   const { port } = proxy.address()
-  const prc = spawn('sshfs', sshArgs(username, port), {
+  spawn('sshfs', sshArgs(username, port), {
     stdio: 'inherit'
   }).once('exit', function (code) {
     // stay alive
@@ -48,6 +48,6 @@ function sshArgs (username, port) {
   return [
     username + '@localhost:',
     mount,
-    '-p', port,
+    '-p', port
   ]
 }
