@@ -5,8 +5,10 @@ const net = require('net')
 const pump = require('pump')
 const os = require('os')
 
+const helpMsg = 'Usage: hyperssh [--rdp?] [key] [user?] [ssh-options...]'
+
 if (!process.argv[2]) {
-  console.error('Usage: hyperssh [--rdp?] [key] [user?] [ssh-options...]')
+  console.error(helpMsg)
   process.exit(1)
 }
 
@@ -17,7 +19,7 @@ const username = process.argv[offset + 1] || os.userInfo().username
 const sshCommand = process.argv.slice(offset + 2)
 
 if (!key || !/^[a-fA-F0-9]{64}$/.test(key)) {
-  console.error('Usage: hyperssh [--rdp?] [key] [user?] [ssh-options...]')
+  console.error(helpMsg)
   process.exit(1)
 }
 

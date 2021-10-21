@@ -1,6 +1,6 @@
 {
   "name": "hyperssh",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Run SSH over Hyperswarm Beta!",
   "main": "index.js",
   "dependencies": {
@@ -11,6 +11,7 @@
   "devDependencies": {},
   "bin": {
     "hyperssh-server": "./server.js",
+    "hyperssh-fuse": "./fuse.js",
     "hyperssh": "./client.js"
   },
   "repository": {
