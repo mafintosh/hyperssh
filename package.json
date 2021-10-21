@@ -11,6 +11,7 @@
   "devDependencies": {},
   "bin": {
     "hyperssh-server": "./server.js",
+    "hyperssh-fuse": "./fuse.js",
     "hyperssh": "./client.js"
   },
   "repository": {
