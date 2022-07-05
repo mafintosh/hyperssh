@@ -27,6 +27,7 @@ const dht = new HyperDHT()
 
 const proxy = net.createServer(function (socket) {
   const stream = dht.connect(Buffer.from(key, 'hex'))
+  stream.setKeepAlive(5000)
   pump(socket, stream, socket)
 })
 
