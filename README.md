@@ -1,6 +1,6 @@
 # hyperssh
 
-Run SSH over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
+SSH and sshfs over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
 
 ### Installation
 ```
@@ -28,6 +28,11 @@ To connect to the server on another computer simply pass the Noise public key to
 ```sh
 hyperssh -s ab01f... -u maf
 ```
+
+```sh
+hyperssh-fuse -s ab01f... -u maf -m ~/mnt
+```
+
 
 That's it! No more remembering hostnames :D
 
