@@ -47,7 +47,9 @@ Hyperswarm will do UDP holepunching under the hood, so even if your server is lo
 ### The hyper-cmd system
 
 hyperssh supports the hyper-cmd system!
+
 Identity management: https://github.com/prdn/hyper-cmd-docs/blob/main/identity.md
+
 Host resolution: https://github.com/prdn/hyper-cmd-docs/blob/main/resolve.md
 
 ### Windows RDP
