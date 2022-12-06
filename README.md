@@ -1,6 +1,6 @@
 # hyperssh
 
-SSH and sshfs over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
+SSH and SSHFS over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
 
 ### Installation
 ```
@@ -30,7 +30,10 @@ hyperssh -s ab01f... -u maf
 hyperssh -s ab01f... -u maf -i keypair.json
 ```
 
-sshfs (mount a remove fs/folder via ssh)
+Read more about using identities here: https://github.com/prdn/hyper-cmd-docs/blob/main/identity.md
+
+
+SSHFS (mount a remove fs/folder via ssh)
 
 ```sh
 hyperssh-fuse -s ab01f... -u maf -m ~/mnt
@@ -41,8 +44,8 @@ Hyperswarm will do UDP holepunching under the hood, so even if your server is lo
 ### The hyper-cmd system
 
 hyperssh supports the hyper-cmd system!
-Read more about hyper-cmd system hooks and utilities here (host and identity path resolution, ...)
-https://github.com/bitfinexcom/hypertele/blob/main/SYSTEM.md
+Identity management: https://github.com/prdn/hyper-cmd-docs/blob/main/identity.md
+Host resolution: https://github.com/prdn/hyper-cmd-docs/blob/main/resolve.md
 
 ### Windows RDP
 
