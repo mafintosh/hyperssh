@@ -2,14 +2,16 @@
 
 SSH and SSHFS over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
 
-### Installation
+## Installation
 ```
 npm install -g hyperssh // ssh / fuse client stubs
 npm install -g hypertele // hyperswarm server proxy
 npm install -g hyper-cmd-utils // keygen utils
 ```
 
-### Usage
+## Usage
+
+### Server
 
 On a server
 
@@ -23,6 +25,8 @@ hypertele-server --seed SEED -l 22
 
 This will start announcing the server on the DHT.
 
+### Client
+
 On the client
 
 ```sh
@@ -31,7 +35,6 @@ hyperssh -s ab01f... -u maf -i keypair.json
 ```
 
 Read more about using identities here: https://github.com/prdn/hyper-cmd-docs/blob/main/identity.md
-
 
 SSHFS (mount a remove fs/folder via ssh)
 
