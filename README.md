@@ -11,7 +11,7 @@ npm install -g hyper-cmd-utils // keygen utils
 
 ### Usage
 
-On a server or some laptop with ssh-server running run
+On a server
 
 ```sh
 hyper-cmd-util-keygen --gen_seed
@@ -21,42 +21,42 @@ hypertele-server --seed SEED -l 22
 -> PEER_KEY
 ```
 
-This will start announcing the server on the DHT, and will print out the Noise public key of the server.
+This will start announcing the server on the DHT.
 
-To connect to the server on another computer simply pass the Noise public key to the `hyperssh` command, along with an optional username:
+On the client
 
 ```sh
 hyperssh -s ab01f... -u maf
+hyperssh -s ab01f... -u maf -i keypair.json
 ```
+
+sshfs (mount a remove fs/folder via ssh)
 
 ```sh
 hyperssh-fuse -s ab01f... -u maf -m ~/mnt
 ```
 
-
-That's it! No more remembering hostnames :D
-
 Hyperswarm will do UDP holepunching under the hood, so even if your server is located on a home network it should be accessible.
+
+### The hyper-cmd system
+
+hyperssh supports the hyper-cmd system!
+Read more about hyper-cmd system hooks and utilities here (host and identity path resolution, ...)
+https://github.com/bitfinexcom/hypertele/blob/main/SYSTEM.md
 
 ### Windows RDP
 
-You can also use hyperssh with Windows RDP to remotely log in to your windows machines over Hyperswarm.
+You can also use hyperssh with Windows RDP to remotely log in to your windows machines.
 
-On the machine you want to log in to (make sure you have RDP enabled)
+On the server
+```sh
+hypertele-server --seed SEED -l 3389
+```
 
-Then on another computer somewhere on the internet do
-
+On the client
 ```sh
 hyperssh --rdp -s ...
 ```
-
-And open your favorite RDP client, configure it to connect to localhost over port 3389 (default),
-with the Windows username etc.
-
-### System
-
-Read more about hypertele system hooks and utilities here (host and identity path resolution, ...)
-https://github.com/bitfinexcom/hypertele/blob/main/SYSTEM.md
 
 ## License
 
