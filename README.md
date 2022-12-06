@@ -44,14 +44,6 @@ hyperssh-fuse -s ab01f... -u maf -m ~/mnt
 
 Hyperswarm will do UDP holepunching under the hood, so even if your server is located on a home network it should be accessible.
 
-### The hyper-cmd system
-
-hyperssh supports the hyper-cmd system!
-
-Identity management: https://github.com/prdn/hyper-cmd-docs/blob/main/identity.md
-
-Host resolution: https://github.com/prdn/hyper-cmd-docs/blob/main/resolve.md
-
 ### Windows RDP
 
 You can also use hyperssh with Windows RDP to remotely log in to your windows machines.
@@ -65,6 +57,14 @@ On the client
 ```sh
 hyperssh --rdp -s ...
 ```
+
+## The hyper-cmd system
+
+hyperssh supports the hyper-cmd system!
+
+Identity management: https://github.com/prdn/hyper-cmd-docs/blob/main/identity.md
+
+Host resolution: https://github.com/prdn/hyper-cmd-docs/blob/main/resolve.md
 
 ## License
 
