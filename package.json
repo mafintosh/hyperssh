@@ -7,7 +7,7 @@
     "@hyper-cmd/lib-net": "https://github.com/prdn/hyper-cmd-lib-net#v0.0.2",
     "@hyper-cmd/lib-keys": "https://github.com/prdn/hyper-cmd-lib-keys#v0.0.2",
     "@hyper-cmd/lib-utils": "https://github.com/prdn/hyper-cmd-lib-utils#v0.0.2",
-    "@hyperswarm/dht": "~6.3.2",
+    "@hyperswarm/dht": "^6.4.0",
     "minimist": "^1.2.5"
   },
   "bin": {
