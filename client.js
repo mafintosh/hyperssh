@@ -1,56 +1,35 @@
 #!/usr/bin/env node
+
 const { spawn } = require('child_process')
+const os = require('os')
 const HyperDHT = require('@hyperswarm/dht')
 const net = require('net')
-const pump = require('pump')
-const os = require('os')
+const argv = require('minimist')(process.argv.slice(2))
+const libNet = require('@hyper-cmd/lib-net')
+const libUtils = require('@hyper-cmd/lib-utils')
+const libKeys = require('@hyper-cmd/lib-keys')
+const connPiper = libNet.connPiper
 
-const helpMsg = 'Usage: hyperssh [--rdp?] [key] [user?] [ssh-options...]'
+const helpMsg = 'Usage:\nhyperssh ?-i identity.json ?-s peer_key ?-u username ?-e ssh_command ?--rdp'
 
-if (!process.argv[2]) {
-  console.error(helpMsg)
-  process.exit(1)
+if (argv.help) {
+  console.log(helpMsg)
+  process.exit(-1)
 }
 
-const rdp = process.argv[2] === '--rdp'
-const offset = rdp ? 3 : 2
-const key = process.argv[offset]
-const username = process.argv[offset + 1] || os.userInfo().username
-const sshCommand = process.argv.slice(offset + 2)
+const conf = {}
 
-if (!key || !/^[a-fA-F0-9]{64}$/.test(key)) {
-  console.error(helpMsg)
-  process.exit(1)
+if (argv.s) {
+  conf.peer = libUtils.resolveHostToKey([], argv.s)
 }
 
-const dht = new HyperDHT()
-
-const proxy = net.createServer(function (socket) {
-  const stream = dht.connect(Buffer.from(key, 'hex'))
-  stream.setKeepAlive(5000)
-  pump(socket, stream, socket)
-})
-
-if (rdp) {
-  proxy.listen(3389, function () {
-    console.log('Client listening on port 3389 (default RDP port)\nOpen your RDP client and connect to localhost')
-  })
-} else {
-  proxy.listen(0, function () {
-    const { port } = proxy.address()
-    spawn('ssh', sshArgs(username, port), {
-      stdio: 'inherit'
-    }).once('exit', function (code) {
-      process.exit(code)
-    })
-  })
+const peer = conf.peer
+if (!peer) {
+  console.error('Error: peer is invalid')
+  process.exit(-1)
 }
 
-process.once('SIGINT', function () {
-  dht.destroy().then(function () {
-    process.exit()
-  })
-})
+const sshCommand = argv.e || ''
 
 function sshArgs (username, port) {
   return [
@@ -60,3 +39,49 @@ function sshArgs (username, port) {
     username + '@localhost'
   ].concat(sshCommand)
 }
+
+let keyPair = null
+if (argv.i) {
+  keyPair = libUtils.resolveIdentity([], argv.i)
+
+  if (!keyPair) {
+    console.error('Error: identity file invalid')
+    process.exit(-1)
+  }
+
+  keyPair = libKeys.parseKeyPair(keyPair)
+}
+
+const username = argv.u || os.userInfo().username
+
+const dht = new HyperDHT({
+  keyPair
+})
+
+const proxy = net.createServer(c => {
+  return connPiper(c, () => {
+    return dht.connect(Buffer.from(peer, 'hex'))
+  }, {}, {})
+})
+
+if (argv.rdp) {
+  proxy.listen(3389, function () {
+    console.log('Client listening on port 3389 (default RDP port)\nOpen your RDP client and connect to localhost')
+  })
+} else {
+  proxy.listen(0, function () {
+    const { port } = proxy.address()
+
+    spawn('ssh', sshArgs(username, port), {
+      stdio: 'inherit'
+    }).once('exit', function (code) {
+      process.exit(code)
+    })
+  })
+}
+
+process.once('SIGINT', () => {
+  dht.destroy().then(() => {
+    process.exit()
+  })
+})
