@@ -1,13 +1,13 @@
 {
   "name": "hyperssh",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Run SSH over Hyperswarm Beta!",
   "main": "index.js",
   "dependencies": {
-    "@hyper-cmd/lib-net": "https://github.com/prdn/hyper-cmd-lib-net#v0.0.2",
+    "@hyper-cmd/lib-net": "https://github.com/prdn/hyper-cmd-lib-net#v0.0.8",
     "@hyper-cmd/lib-keys": "https://github.com/prdn/hyper-cmd-lib-keys#v0.0.2",
     "@hyper-cmd/lib-utils": "https://github.com/prdn/hyper-cmd-lib-utils#v0.0.2",
-    "@hyperswarm/dht": "^6.4.0",
+    "@hyperswarm/dht": "^6.5.0",
     "minimist": "^1.2.5"
   },
   "bin": {
