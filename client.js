@@ -60,7 +60,10 @@ const dht = new HyperDHT({
 
 const proxy = net.createServer(c => {
   return connPiper(c, () => {
-    return dht.connect(Buffer.from(peer, 'hex'))
+    const stream = dht.connect(Buffer.from(peer, 'hex'))
+    stream.setKeepAlive(conf.keepAlive)
+
+    return stream
   }, {}, {})
 })
 
