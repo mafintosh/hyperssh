@@ -23,6 +23,10 @@ if (argv.s) {
   conf.peer = libUtils.resolveHostToKey([], argv.s)
 }
 
+if (!conf.keepAlive) {
+  conf.keepAlive = 5000
+}
+
 const peer = conf.peer
 if (!peer) {
   console.error('Error: peer is invalid')
@@ -60,7 +64,10 @@ const dht = new HyperDHT({
 
 const proxy = net.createServer(c => {
   return connPiper(c, () => {
-    return dht.connect(Buffer.from(peer, 'hex'))
+    const stream = dht.connect(Buffer.from(peer, 'hex'))
+    stream.setKeepAlive(conf.keepAlive)
+
+    return stream
   }, {}, {})
 })
 
