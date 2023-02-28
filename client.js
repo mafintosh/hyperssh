@@ -23,6 +23,10 @@ if (argv.s) {
   conf.peer = libUtils.resolveHostToKey([], argv.s)
 }
 
+if (!conf.keepAlive) {
+  conf.keepAlive = 5000
+}
+
 const peer = conf.peer
 if (!peer) {
   console.error('Error: peer is invalid')
