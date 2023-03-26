@@ -1,6 +1,6 @@
 # hyperssh
 
-SSH and SSHFS over the [Hyperswarm DHT](https://github.com/hyperswarm/dht)!
+SSH and SSHFS over the [HyperDHT](https://github.com/holepunchto/hyperdht)!
 
 ## Installation
 ```
