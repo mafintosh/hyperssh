@@ -1,6 +1,6 @@
 {
   "name": "hyperssh",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "Run SSH over Hyperswarm Beta!",
   "main": "index.js",
   "dependencies": {
